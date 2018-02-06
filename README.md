@@ -1,8 +1,12 @@
 # CS 429 - Information Retrieval
-IIT Information Retrieval Coursework for Spring 2018
+Illinois Tech CS 429 - Information Retrieval Coursework for Spring 2018
 
-Mayank Bansal
-A20392482 | mbansal5@hawk.iit.edu
+Professor: John Korah
+
+Mayank Bansal <br>
+mbansal5@hawk.iit.edu <br>
+A20392482
 
 ## Assignments
-* Assignment 1 - Boolean Retrieval
+* Assignment 1 - Boolean Retrieval (02/05/2018)
+* Assignment 2 - Ranked Retrieval  (02/20/2018)
