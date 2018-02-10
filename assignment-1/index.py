@@ -1,4 +1,4 @@
-# Python 2.7.3
+# Python 3.6.4
 
 from __future__ import print_function
 import sys
@@ -84,8 +84,8 @@ class Index:
 
 	@staticmethod
 	def merge_lists(list1, list2):
-		list1.sort()
-		list2.sort()
+		list1 = sorted(list1)
+		list2 = sorted(list2)
 		i, j = 0, 0
 		merged = []
 		while i < len(list1) and j < len(list2):
