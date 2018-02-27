@@ -1,13 +1,13 @@
 Mayanks-MacBook-Pro-2:assignment-2 mayankbansal$ python3 index.py
 
 >>> Build Index
-TF-IDF Index built in 0.70953512191772460938 seconds
+TF-IDF Index built in 0.90143799781799316406 seconds
 Generating document vectors
-Document vectors built in 13.08580112457275390625 seconds
+Document vectors built in 12.65137100219726562500 seconds
 Generating document magnitudes
-Magnitudes calculated in 8.04703688621520996094 seconds
-Champions list built in 0.06820297241210937500 seconds
-Cluster Pruning index built in 0.5124390125274658 seconds
+Magnitudes calculated in 8.87651681900024414062 seconds
+Champions list built in 0.07470202445983886719 seconds
+Cluster Pruning index built in 0.5330939292907715 seconds
 Top 10 result(s) for the query ' with without yemen ' using exact retrieval method are:
 1 . Text-10.txt with score 0.38430857158288007
 2 . Text-195.txt with score 0.3708721361840458
@@ -19,7 +19,7 @@ Top 10 result(s) for the query ' with without yemen ' using exact retrieval meth
 8 . Text-100.txt with score 0.22838854593917624
 9 . Text-86.txt with score 0.1698569606493578
 10 . Text-159.txt with score 0.1624301390890514
-Results found in 0.00593113899230957031 seconds
+Results found in 0.00426864624023437500 seconds
 Top 10 result(s) for the query ' with without yemen ' using champion list method are:
 1 . Text-10.txt with score 0.38430857158288007
 2 . Text-195.txt with score 0.3708721361840458
@@ -31,7 +31,7 @@ Top 10 result(s) for the query ' with without yemen ' using champion list method
 8 . Text-99.txt with score 0.2872497784571572
 9 . Text-100.txt with score 0.22838854593917624
 10 . Text-86.txt with score 0.1698569606493578
-Results found in 0.00117468833923339844 seconds
+Results found in 0.00119185447692871094 seconds
 Top 10 result(s) for the query ' with without yemen ' using index elimination method are:
 1 . Text-10.txt with score 0.38430857158288007
 2 . Text-195.txt with score 0.3708721361840458
@@ -43,19 +43,67 @@ Top 10 result(s) for the query ' with without yemen ' using index elimination me
 8 . Text-100.txt with score 0.22838854593917624
 9 . Text-86.txt with score 0.1698569606493578
 10 . Text-159.txt with score 0.1624301390890514
-Results found in 0.00114202499389648438 seconds
+Results found in 0.00110530853271484375 seconds
 Top 10 result(s) for the query ' with without yemen ' using cluster pruning method are:
-1 . Text-163.txt with score 0.04920533804067407
-2 . Text-177.txt with score 0.04920533804067407
-3 . Text-188.txt with score 0.04920533804067407
-4 . Text-407.txt with score 0.04920533804067407
-5 . Text-361.txt with score 0.04920533804067407
-6 . Text-375.txt with score 0.04920533804067407
-7 . Text-413.txt with score 0.04920533804067407
-8 . Text-43.txt with score 0.04920533804067407
-9 . Text-349.txt with score 0.04920533804067407
-10 . Text-57.txt with score 0.04920533804067407
-Results found in 0.00229406356811523438 seconds
+1 . Text-163.txt with score 0.36273360050456244
+2 . Text-177.txt with score 0.36273360050456244
+3 . Text-188.txt with score 0.36273360050456244
+4 . Text-407.txt with score 0.36273360050456244
+5 . Text-361.txt with score 0.36273360050456244
+6 . Text-375.txt with score 0.36273360050456244
+7 . Text-413.txt with score 0.36273360050456244
+8 . Text-43.txt with score 0.36273360050456244
+9 . Text-349.txt with score 0.36273360050456244
+10 . Text-57.txt with score 0.36273360050456244
+Results found in 0.00241112709045410156 seconds
+Top 10 result(s) for the query ' is germany a real country ' using exact retrieval method are:
+1 . Text-102.txt with score 0.12646581416200922
+2 . Text-316.txt with score 0.12284946116659774
+3 . Text-254.txt with score 0.12138205241118222
+4 . Text-315.txt with score 0.12014259858490915
+5 . Text-364.txt with score 0.11523378337969693
+6 . Text-266.txt with score 0.1093038014507705
+7 . Text-132.txt with score 0.10606905972229533
+8 . Text-53.txt with score 0.10191337210600637
+9 . Text-98.txt with score 0.09307346774760436
+10 . Text-300.txt with score 0.09252527728124449
+Results found in 0.00931096076965332031 seconds
+Top 10 result(s) for the query ' is germany a real country ' using champion list method are:
+1 . Text-102.txt with score 0.12646581416200922
+2 . Text-316.txt with score 0.12284946116659774
+3 . Text-316.txt with score 0.12284946116659774
+4 . Text-254.txt with score 0.12138205241118222
+5 . Text-254.txt with score 0.12138205241118222
+6 . Text-315.txt with score 0.12014259858490915
+7 . Text-315.txt with score 0.12014259858490915
+8 . Text-315.txt with score 0.12014259858490915
+9 . Text-364.txt with score 0.11523378337969693
+10 . Text-266.txt with score 0.1093038014507705
+Results found in 0.01072621345520019531 seconds
+Top 10 result(s) for the query ' is germany a real country ' using index elimination method are:
+1 . Text-316.txt with score 0.12284946116659774
+2 . Text-254.txt with score 0.12138205241118222
+3 . Text-315.txt with score 0.12014259858490915
+4 . Text-266.txt with score 0.1093038014507705
+5 . Text-132.txt with score 0.10606905972229533
+6 . Text-53.txt with score 0.10191337210600637
+7 . Text-98.txt with score 0.09307346774760436
+8 . Text-300.txt with score 0.09252527728124449
+9 . Text-138.txt with score 0.09032148982075948
+10 . Text-1.txt with score 0.0811821249513838
+Results found in 0.00230002403259277344 seconds
+Top 10 result(s) for the query ' is germany a real country ' using cluster pruning method are:
+1 . Text-163.txt with score 0.06106300869499196
+2 . Text-177.txt with score 0.06106300869499196
+3 . Text-188.txt with score 0.06106300869499196
+4 . Text-407.txt with score 0.06106300869499196
+5 . Text-361.txt with score 0.06106300869499196
+6 . Text-375.txt with score 0.06106300869499196
+7 . Text-413.txt with score 0.06106300869499196
+8 . Text-43.txt with score 0.06106300869499196
+9 . Text-349.txt with score 0.06106300869499196
+10 . Text-57.txt with score 0.06106300869499196
+Results found in 0.00188994407653808594 seconds
 Top 10 result(s) for the query ' can germany win the war ' using exact retrieval method are:
 1 . Text-102.txt with score 0.1259860293403562
 2 . Text-378.txt with score 0.10549683642896829
@@ -67,7 +115,7 @@ Top 10 result(s) for the query ' can germany win the war ' using exact retrieval
 8 . Text-398.txt with score 0.08912205670184022
 9 . Text-148.txt with score 0.08825034671598696
 10 . Text-316.txt with score 0.08300307206269082
-Results found in 0.01371717453002929688 seconds
+Results found in 0.01695322990417480469 seconds
 Top 10 result(s) for the query ' can germany win the war ' using champion list method are:
 1 . Text-102.txt with score 0.1259860293403562
 2 . Text-102.txt with score 0.1259860293403562
@@ -79,7 +127,7 @@ Top 10 result(s) for the query ' can germany win the war ' using champion list m
 8 . Text-312.txt with score 0.09925282592506555
 9 . Text-77.txt with score 0.09837756889547632
 10 . Text-77.txt with score 0.09837756889547632
-Results found in 0.01850080490112304688 seconds
+Results found in 0.01278805732727050781 seconds
 Top 10 result(s) for the query ' can germany win the war ' using index elimination method are:
 1 . Text-102.txt with score 0.1259860293403562
 2 . Text-378.txt with score 0.10549683642896829
@@ -91,19 +139,19 @@ Top 10 result(s) for the query ' can germany win the war ' using index eliminati
 8 . Text-316.txt with score 0.08300307206269082
 9 . Text-43.txt with score 0.08019279099350377
 10 . Text-48.txt with score 0.07989362575589146
-Results found in 0.00301218032836914062 seconds
+Results found in 0.00432682037353515625 seconds
 Top 10 result(s) for the query ' can germany win the war ' using cluster pruning method are:
-1 . Text-163.txt with score 0.05752312098849278
-2 . Text-177.txt with score 0.05752312098849278
-3 . Text-188.txt with score 0.05752312098849278
-4 . Text-407.txt with score 0.05752312098849278
-5 . Text-361.txt with score 0.05752312098849278
-6 . Text-375.txt with score 0.05752312098849278
-7 . Text-413.txt with score 0.05752312098849278
-8 . Text-43.txt with score 0.05752312098849278
-9 . Text-349.txt with score 0.05752312098849278
-10 . Text-57.txt with score 0.05752312098849278
-Results found in 0.00274491310119628906 seconds
+1 . Text-163.txt with score 0.08912205670184022
+2 . Text-177.txt with score 0.08912205670184022
+3 . Text-188.txt with score 0.08912205670184022
+4 . Text-407.txt with score 0.08912205670184022
+5 . Text-361.txt with score 0.08912205670184022
+6 . Text-375.txt with score 0.08912205670184022
+7 . Text-413.txt with score 0.08912205670184022
+8 . Text-43.txt with score 0.08912205670184022
+9 . Text-349.txt with score 0.08912205670184022
+10 . Text-57.txt with score 0.08912205670184022
+Results found in 0.00353312492370605469 seconds
 Top 10 result(s) for the query ' what do they speak in germany ' using exact retrieval method are:
 1 . Text-364.txt with score 0.0760689158992883
 2 . Text-128.txt with score 0.07336156443249596
@@ -115,7 +163,7 @@ Top 10 result(s) for the query ' what do they speak in germany ' using exact ret
 8 . Text-367.txt with score 0.06425424316116535
 9 . Text-376.txt with score 0.06423451509608841
 10 . Text-229.txt with score 0.06367398632155596
-Results found in 0.02823114395141601562 seconds
+Results found in 0.02503395080566406250 seconds
 Top 10 result(s) for the query ' what do they speak in germany ' using champion list method are:
 1 . Text-364.txt with score 0.0760689158992883
 2 . Text-364.txt with score 0.0760689158992883
@@ -127,7 +175,7 @@ Top 10 result(s) for the query ' what do they speak in germany ' using champion 
 8 . Text-53.txt with score 0.07031467827649648
 9 . Text-53.txt with score 0.07031467827649648
 10 . Text-1.txt with score 0.06717356315330002
-Results found in 0.03304409980773925781 seconds
+Results found in 0.03354096412658691406 seconds
 Top 10 result(s) for the query ' what do they speak in germany ' using index elimination method are:
 1 . Text-128.txt with score 0.07336156443249596
 2 . Text-53.txt with score 0.07031467827649648
@@ -139,112 +187,65 @@ Top 10 result(s) for the query ' what do they speak in germany ' using index eli
 8 . Text-229.txt with score 0.06367398632155596
 9 . Text-47.txt with score 0.06346109772425819
 10 . Text-103.txt with score 0.06166129887722091
-Results found in 0.00405669212341308594 seconds
+Results found in 0.00478696823120117188 seconds
 Top 10 result(s) for the query ' what do they speak in germany ' using cluster pruning method are:
-1 . Text-163.txt with score 0.06121083078342527
-2 . Text-177.txt with score 0.06121083078342527
-3 . Text-188.txt with score 0.06121083078342527
-4 . Text-407.txt with score 0.06121083078342527
-5 . Text-361.txt with score 0.06121083078342527
-6 . Text-375.txt with score 0.06121083078342527
-7 . Text-413.txt with score 0.06121083078342527
-8 . Text-43.txt with score 0.06121083078342527
-9 . Text-349.txt with score 0.06121083078342527
-10 . Text-57.txt with score 0.06121083078342527
-Results found in 0.00309395790100097656 seconds
-Top 10 result(s) for the query ' is germany a country ' using exact retrieval method are:
-1 . Text-102.txt with score 0.2454922381208328
-2 . Text-316.txt with score 0.2384722652011848
-3 . Text-364.txt with score 0.2236889042027861
-4 . Text-132.txt with score 0.20589857456056146
-5 . Text-300.txt with score 0.1796077268235133
-6 . Text-24.txt with score 0.17568568209497337
-7 . Text-138.txt with score 0.1753297903740312
-8 . Text-1.txt with score 0.15758868656939573
-9 . Text-150.txt with score 0.15747639784571293
-10 . Text-116.txt with score 0.15623850825008329
-Results found in 0.00788307189941406250 seconds
-Top 10 result(s) for the query ' is germany a country ' using champion list method are:
-1 . Text-102.txt with score 0.2454922381208328
-2 . Text-316.txt with score 0.2384722652011848
-3 . Text-316.txt with score 0.2384722652011848
-4 . Text-364.txt with score 0.2236889042027861
-5 . Text-132.txt with score 0.20589857456056146
-6 . Text-132.txt with score 0.20589857456056146
-7 . Text-300.txt with score 0.1796077268235133
-8 . Text-300.txt with score 0.1796077268235133
-9 . Text-24.txt with score 0.17568568209497337
-10 . Text-138.txt with score 0.1753297903740312
-Results found in 0.00332903861999511719 seconds
-Top 10 result(s) for the query ' is germany a country ' using index elimination method are:
-1 . Text-102.txt with score 0.2454922381208328
-2 . Text-316.txt with score 0.2384722652011848
-3 . Text-364.txt with score 0.2236889042027861
-4 . Text-132.txt with score 0.20589857456056146
-5 . Text-300.txt with score 0.1796077268235133
-6 . Text-24.txt with score 0.17568568209497337
-7 . Text-138.txt with score 0.1753297903740312
-8 . Text-1.txt with score 0.15758868656939573
-9 . Text-150.txt with score 0.15747639784571293
-10 . Text-116.txt with score 0.15623850825008329
-Results found in 0.00409579277038574219 seconds
-Top 10 result(s) for the query ' is germany a country ' using cluster pruning method are:
-1 . Text-163.txt with score 0.14578478014578894
-2 . Text-177.txt with score 0.14578478014578894
-3 . Text-188.txt with score 0.14578478014578894
-4 . Text-407.txt with score 0.14578478014578894
-5 . Text-361.txt with score 0.14578478014578894
-6 . Text-375.txt with score 0.14578478014578894
-7 . Text-413.txt with score 0.14578478014578894
-8 . Text-43.txt with score 0.14578478014578894
-9 . Text-349.txt with score 0.14578478014578894
-10 . Text-57.txt with score 0.14578478014578894
-Results found in 0.00167012214660644531 seconds
-Top 10 result(s) for the query ' british people hate the germans ' using exact retrieval method are:
-1 . Text-291.txt with score 0.12039396033543211
-2 . Text-247.txt with score 0.11549492363987501
-3 . Text-298.txt with score 0.11542870130131828
-4 . Text-316.txt with score 0.11338799445600349
-5 . Text-266.txt with score 0.10839768281069635
-6 . Text-254.txt with score 0.10307514773572063
-7 . Text-300.txt with score 0.0946003435907101
-8 . Text-49.txt with score 0.08313886289239578
-9 . Text-138.txt with score 0.08252646031680466
-10 . Text-54.txt with score 0.07819174509669939
-Results found in 0.01143789291381835938 seconds
-Top 10 result(s) for the query ' british people hate the germans ' using champion list method are:
-1 . Text-291.txt with score 0.12039396033543211
-2 . Text-247.txt with score 0.11549492363987501
-3 . Text-247.txt with score 0.11549492363987501
-4 . Text-298.txt with score 0.11542870130131828
-5 . Text-298.txt with score 0.11542870130131828
-6 . Text-298.txt with score 0.11542870130131828
-7 . Text-316.txt with score 0.11338799445600349
-8 . Text-316.txt with score 0.11338799445600349
-9 . Text-266.txt with score 0.10839768281069635
-10 . Text-254.txt with score 0.10307514773572063
-Results found in 0.00765180587768554688 seconds
-Top 10 result(s) for the query ' british people hate the germans ' using index elimination method are:
-1 . Text-247.txt with score 0.11549492363987501
-2 . Text-298.txt with score 0.11542870130131828
-3 . Text-316.txt with score 0.11338799445600349
-4 . Text-254.txt with score 0.10307514773572063
-5 . Text-300.txt with score 0.0946003435907101
-6 . Text-49.txt with score 0.08313886289239578
-7 . Text-54.txt with score 0.07819174509669939
-8 . Text-61.txt with score 0.07406547389261424
-9 . Text-82.txt with score 0.07236107835252248
-10 . Text-246.txt with score 0.07227538668496418
-Results found in 0.00153994560241699219 seconds
-Top 10 result(s) for the query ' british people hate the germans ' using cluster pruning method are:
-1 . Text-163.txt with score 0.04950130773484068
-2 . Text-177.txt with score 0.04950130773484068
-3 . Text-188.txt with score 0.04950130773484068
-4 . Text-407.txt with score 0.04950130773484068
-5 . Text-361.txt with score 0.04950130773484068
-6 . Text-375.txt with score 0.04950130773484068
-7 . Text-413.txt with score 0.04950130773484068
-8 . Text-43.txt with score 0.04950130773484068
-9 . Text-349.txt with score 0.04950130773484068
-10 . Text-57.txt with score 0.04950130773484068
-Results found in 0.00194191932678222656 seconds
+1 . Text-163.txt with score 0.04953954808345794
+2 . Text-177.txt with score 0.04953954808345794
+3 . Text-188.txt with score 0.04953954808345794
+4 . Text-407.txt with score 0.04953954808345794
+5 . Text-361.txt with score 0.04953954808345794
+6 . Text-375.txt with score 0.04953954808345794
+7 . Text-413.txt with score 0.04953954808345794
+8 . Text-43.txt with score 0.04953954808345794
+9 . Text-349.txt with score 0.04953954808345794
+10 . Text-57.txt with score 0.04953954808345794
+Results found in 0.00359201431274414062 seconds
+Top 10 result(s) for the query ' why do british people hate the germans ' using exact retrieval method are:
+1 . Text-54.txt with score 0.08390003656351466
+2 . Text-300.txt with score 0.07888403146601118
+3 . Text-254.txt with score 0.07856535589013582
+4 . Text-291.txt with score 0.07605623443342359
+5 . Text-367.txt with score 0.07372362441730837
+6 . Text-247.txt with score 0.07296137583439488
+7 . Text-298.txt with score 0.07291954132964092
+8 . Text-49.txt with score 0.07179739429473447
+9 . Text-316.txt with score 0.07163036969840023
+10 . Text-147.txt with score 0.06985226291921769
+Results found in 0.01740622520446777344 seconds
+Top 10 result(s) for the query ' why do british people hate the germans ' using champion list method are:
+1 . Text-54.txt with score 0.08390003656351466
+2 . Text-54.txt with score 0.08390003656351466
+3 . Text-54.txt with score 0.08390003656351466
+4 . Text-300.txt with score 0.07888403146601118
+5 . Text-300.txt with score 0.07888403146601118
+6 . Text-300.txt with score 0.07888403146601118
+7 . Text-300.txt with score 0.07888403146601118
+8 . Text-300.txt with score 0.07888403146601118
+9 . Text-254.txt with score 0.07856535589013582
+10 . Text-254.txt with score 0.07856535589013582
+Results found in 0.02056717872619628906 seconds
+Top 10 result(s) for the query ' why do british people hate the germans ' using index elimination method are:
+1 . Text-54.txt with score 0.08390003656351466
+2 . Text-300.txt with score 0.07888403146601118
+3 . Text-254.txt with score 0.07856535589013582
+4 . Text-367.txt with score 0.07372362441730837
+5 . Text-298.txt with score 0.07291954132964092
+6 . Text-49.txt with score 0.07179739429473447
+7 . Text-147.txt with score 0.06985226291921769
+8 . Text-278.txt with score 0.06571710688095098
+9 . Text-47.txt with score 0.057953996193283994
+10 . Text-229.txt with score 0.05316348615879089
+Results found in 0.00253701210021972656 seconds
+Top 10 result(s) for the query ' why do british people hate the germans ' using cluster pruning method are:
+1 . Text-163.txt with score 0.04565838467446946
+2 . Text-177.txt with score 0.04565838467446946
+3 . Text-188.txt with score 0.04565838467446946
+4 . Text-407.txt with score 0.04565838467446946
+5 . Text-361.txt with score 0.04565838467446946
+6 . Text-375.txt with score 0.04565838467446946
+7 . Text-413.txt with score 0.04565838467446946
+8 . Text-43.txt with score 0.04565838467446946
+9 . Text-349.txt with score 0.04565838467446946
+10 . Text-57.txt with score 0.04565838467446946
+Results found in 0.00372219085693359375 seconds
+Mayanks-MacBook-Pro-2:assignment-2 mayankbansal$

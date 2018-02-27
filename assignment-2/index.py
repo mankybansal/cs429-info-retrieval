@@ -18,10 +18,12 @@ class Index:
 
 		self.doc_id = {}
 		self.documents = {}
-		self.document_mags = {}
-		self.document_vectors = {}
 
 		self.collection = collections.defaultdict(list)
+
+		self.document_magnitudes = {}
+		self.document_vectors = {}
+
 		self.champion_index = {}
 		self.leaders = collections.defaultdict(list)
 
@@ -89,7 +91,7 @@ class Index:
 				for j in range(1, len(v)):
 					if v[j][0] == i:
 						doc_mag += v[j][1] ** 2
-			self.document_mags[i] = math.sqrt(doc_mag)
+			self.document_magnitudes[i] = math.sqrt(doc_mag)
 		end = time.time()
 		print("Magnitudes calculated in", '{:.20f}'.format(end - start), "seconds")
 
@@ -221,7 +223,7 @@ class Index:
 			for i in range(1, len(v)):
 				q_mag += v[i][1] ** 2
 
-		length = self.document_mags[doc] * math.sqrt(q_mag)
+		length = self.document_magnitudes[doc] * math.sqrt(q_mag)
 
 		if length != 0:
 			cosine_score = score / length
@@ -240,7 +242,7 @@ class Index:
 			if k in doc_v2.keys():
 				scores += v * doc_v2[k]
 
-		length = math.sqrt(self.document_mags[doc_1] * self.document_mags[doc_2])
+		length = math.sqrt(self.document_magnitudes[doc_1] * self.document_magnitudes[doc_2])
 		if length > 0:
 			cosine_score = scores / length
 		else:
@@ -282,10 +284,10 @@ print('\n>>> Build Index')
 
 queries = [
 	"with without yemen",
+	"is germany a real country",
 	"can germany win the war",
 	"what do they speak in germany",
-	"is germany a country",
-	"british people hate the germans"
+	"why do british people hate the germans"
 ]
 
 obj.build_index()
