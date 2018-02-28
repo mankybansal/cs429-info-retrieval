@@ -24,7 +24,7 @@ class Index:
 		self.document_magnitudes = {}
 		self.document_vectors = {}
 
-		self.champion_index = {}
+		self.champions_list = {}
 		self.leaders = collections.defaultdict(list)
 
 	# function to read documents from collection, tokenize and build the index with tokens
@@ -65,7 +65,7 @@ class Index:
 			idf = math.log(len(self.doc_id) / len(init_dict[i].keys()), 10)
 			self.collection[i].append(idf)
 			for j in init_dict[i].keys():
-				tf_idf = (1 + math.log(len(init_dict[i][j]))) * idf
+				tf_idf = (1 + math.log(len(init_dict[i][j]), 10)) * idf
 				self.collection[i].append((j, tf_idf, init_dict[i][j]))
 
 		end = time.time()
@@ -96,10 +96,11 @@ class Index:
 		print("Magnitudes calculated in", '{:.20f}'.format(end - start), "seconds")
 
 		start = time.time()
-		for t, v in self.collection.items():
+		r = int(math.sqrt(len(self.doc_id))) + 10
+		for k, v in self.collection.items():
 			sorted_list = v[1:]
 			sorted_list.sort(key=lambda x: x[1], reverse=True)
-			self.champion_index[t] = [x[0] for x in sorted_list[:len(self.doc_id)]]
+			self.champions_list[k] = [x[0] for x in sorted_list[:r]]
 
 		end = time.time()
 		print("Champions list built in", '{:.20f}'.format(end - start), "seconds")
@@ -138,16 +139,18 @@ class Index:
 	def inexact_query_champion(self, query, k_docs):
 		start = time.time()
 		q_tf_idf = self.clean_query(query)
-
 		final_list = []
+
 		for k in q_tf_idf.keys():
-			if k in self.champion_index.keys():
-				final_list += self.champion_index[k]
+			if k in self.champions_list.keys():
+				final_list += self.champions_list[k]
 
 		scores = []
 		for doc in final_list:
 			scores.append((doc, self.cosine_similarity(q_tf_idf, doc)))
+		scores = list(set(scores))
 		scores.sort(key=lambda x: x[1], reverse=True)
+
 		end = time.time()
 		self.print_results(start, end, k_docs, query, scores, "champion list")
 
@@ -266,7 +269,7 @@ class Index:
 			idf = math.log(len(query) / len(init_dict[i].keys()), 10)
 			final_dict[i].append(idf)
 			for j in init_dict[i].keys():
-				tf_idf = (1 + math.log(len(init_dict[i][j]))) * idf
+				tf_idf = (1 + math.log(len(init_dict[i][j]), 10)) * idf
 				final_dict[i].append((j, tf_idf, init_dict[i][j]))
 
 		return final_dict
