@@ -1,0 +1,59 @@
+>>> exec(open("assignment2_solution.py").read())
+>>> a=index("collection/","stop-list.txt")
+TF-IDF Index built in  6.543777227401733  seconds.
+Champion list built in  0.18128204345703125  seconds.
+Cluster Prunning index built in  1.1015641689300537  seconds.
+>>> a.exact_query("with wthout yemen",10)
+Top  10  result(s) for the query ' with wthout yemen ' using exact retrieval method are: 
+1 . Text-10.txt  with score  0.13580183511145325
+2 . Text-36.txt  with score  0.13291038623258195
+3 . Text-195.txt  with score  0.11184964307137421
+4 . Text-267.txt  with score  0.11183212123998053
+5 . Text-234.txt  with score  0.10396670745654665
+6 . Text-344.txt  with score  0.10131496321522358
+7 . Text-99.txt  with score  0.07716605780599367
+8 . Text-100.txt  with score  0.07214891375803671
+9 . Text-226.txt  with score  0.061469908340780796
+10 . Text-86.txt  with score  0.05502561605166143
+Results found in  9.393692016601562e-05  seconds.
+>>> a.inexact_query_champion("with without yemen",10)
+Top  10  result(s) for the query ' with without yemen ' using champion list method are: 
+1 . Text-10.txt  with score  0.12365227257561734
+2 . Text-36.txt  with score  0.12101950826418349
+3 . Text-195.txt  with score  0.10184297245465308
+4 . Text-267.txt  with score  0.10182701822053145
+5 . Text-234.txt  with score  0.09466528665577766
+6 . Text-344.txt  with score  0.09225078171584221
+7 . Text-99.txt  with score  0.07711482584086975
+8 . Text-100.txt  with score  0.06569408390337025
+9 . Text-86.txt  with score  0.06043220623692249
+10 . Text-159.txt  with score  0.06002586846164444
+Results found in  0.00038814544677734375  seconds.
+>>> a.inexact_query_index_elimination("with without yemen",10)
+Reduced query terms to ' yemen '
+Top  10  result(s) for the query ' with without yemen ' using index elimination method are: 
+1 . Text-10.txt  with score  0.13580183511145325
+2 . Text-36.txt  with score  0.13291038623258195
+3 . Text-195.txt  with score  0.11184964307137421
+4 . Text-267.txt  with score  0.11183212123998053
+5 . Text-234.txt  with score  0.10396670745654665
+6 . Text-344.txt  with score  0.10131496321522358
+7 . Text-99.txt  with score  0.07716605780599367
+8 . Text-100.txt  with score  0.07214891375803671
+9 . Text-226.txt  with score  0.061469908340780796
+10 . Text-86.txt  with score  0.05502561605166143
+Results found in  0.00011706352233886719  seconds.
+>>> a.inexact_query_cluster_pruning("with without yemen",10)
+Top  10  result(s) for the query ' with without yemen ' using cluster prunning method are: 
+1 . Text-330.txt
+2 . Text-123.txt
+3 . Text-60.txt
+4 . Text-50.txt
+5 . Text-142.txt
+6 . Text-16.txt
+7 . Text-180.txt
+8 . Text-25.txt
+9 . Text-259.txt
+10 . Text-285.txt
+Results found in  0.00011897087097167969  seconds.
+
