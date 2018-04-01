@@ -80,6 +80,7 @@ class Index:
 					if i > 0 & doc == v2[0]:
 						document_vector[k] = v2[1]
 			self.document_vectors[doc] = document_vector
+		# print(document_vector)
 		end = time.time()
 		print("Document vectors built in", '{:.20f}'.format(end - start), "seconds")
 
