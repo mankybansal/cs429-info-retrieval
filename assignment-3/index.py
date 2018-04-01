@@ -37,13 +37,13 @@ class Index:
 		# read and clean documents
 		lines = [line.rstrip('\n') for line in open(self.doc_path)]
 		doc_id = -1
-		for i, line in enumerate(lines):
+		for line in lines:
 			if line[:5] == '*TEXT':
 				doc_id += 1
 				self.doc_id[doc_id] = "TEXT " + line[6:9] + ".txt"
 				self.documents[doc_id] = []
 			else:
-				words = [x for x in re.sub('[^A-Za-z\n ]+', '', line.lower()).split() if x not in self.stop_words]
+				words = [x for x in re.sub('[^A-Za-z0-9\n ]+', '', line.lower()).split() if x not in self.stop_words]
 				self.documents[doc_id].extend(words)
 
 		# insert into init dictionary
@@ -64,9 +64,9 @@ class Index:
 				self.collection[i].append((j, tf_idf, init_dict[i][j]))
 
 		# init document vectors
-		dictionary = list(self.collection.keys())
+		self.all_tokens_set = list(self.collection.keys())
 		for doc in self.doc_id:
-			self.document_vectors[doc] = dict.fromkeys(dictionary, 0)
+			self.document_vectors[doc] = dict.fromkeys(self.all_tokens_set, 0)
 			self.document_magnitudes[doc] = 0
 
 		# insert in vectors & calculate magnitude
@@ -74,7 +74,7 @@ class Index:
 			for i, v2 in enumerate(v):
 				if i > 0:
 					self.document_vectors[v2[0]][k] = v2[1]
-					self.document_magnitudes[v2[0]] += v2[1]**2
+					self.document_magnitudes[v2[0]] += v2[1] ** 2
 
 		# recalculate magnitude
 		for doc, mag in self.document_magnitudes.items():
@@ -86,22 +86,47 @@ class Index:
 	# pos_feedback - documents deemed to be relevant by the user
 	# neg_feedback - documents deemed to be non-relevant by the user
 	# Return the new query  terms and their weights
-	def rocchio(self, query_terms, pos_feedback, neg_feedback, alpha, beta, gamma):
+	def rocchio(self, query_vector, pos_feedback, neg_feedback, alpha, beta, gamma):
 		start = time.time()
 
-		print("Pos Vectors")
-		for doc in pos_feedback.split(" "):
-			print(doc)
-			print(self.document_vectors[int(doc)])
+		# add query weights
+		for term, weight in query_vector.items():
+			query_vector[term] = alpha * weight
 
-		print("Neg Vectors")
-		for doc in neg_feedback.split(" "):
-			print(doc)
-			print(self.document_vectors[int(doc)])
+		old_query = {}
+		for term, weight in query_vector.items():
+			if weight > 0:
+				old_query[term] = weight
 
+		# add positive feedback weights
+		if len(pos_feedback) > 0:
+			pos_feedback = list(map(int, pos_feedback.split(" ")))
+			for doc in pos_feedback:
+				for term, weight in self.document_vectors[doc - 1].items():
+					query_vector[term] += beta * weight / len(pos_feedback)
+
+		# subtract negative feedback weights
+		if len(neg_feedback) > 0:
+			neg_feedback = list(map(int, neg_feedback.split(" ")))
+			for doc in neg_feedback:
+				for term, weight in self.document_vectors[doc - 1].items():
+					query_vector[term] -= gamma * weight / len(neg_feedback)
+
+		# clean negative weights
+		for term, weight in query_vector.items():
+			if weight < 0:
+				query_vector[term] = 0
 		end = time.time()
 		print("New query computed in", '{:.20f}'.format(end - start), "seconds")
+
+		new_query = {}
+		for term, weight in query_vector.items():
+			if weight > 0:
+				new_query[term] = weight
+
 		print("New query terms with weights:")
+		print(new_query)
+		return query_vector
 
 	# function for exact top K retrieval using cosine similarity
 	# Returns at the minimum the document names of the top K documents ordered in decreasing order of similarity score
@@ -115,6 +140,7 @@ class Index:
 		scores.sort(key=lambda x: x[1], reverse=True)
 		end = time.time()
 		self.print_results(start, end, k_docs, query, scores, "exact retrieval")
+		return scores
 
 	def cosine_similarity(self, q_tf_idf, doc):
 		# get product of query and documents
@@ -155,6 +181,7 @@ class Index:
 		for i in init_dict.keys():
 			idf = math.log(len(query) / len(init_dict[i].keys()), 10)
 			final_dict[i].append(idf)
+
 			for j in init_dict[i].keys():
 				tf_idf = (1 + math.log(len(init_dict[i][j]), 10)) * idf
 				final_dict[i].append((j, tf_idf, init_dict[i][j]))
@@ -175,47 +202,76 @@ class Index:
 
 	# function to clean a query
 	def clean_query(self, query):
-		query = re.sub('[^A-Za-z\n ]+', '', query.lower()).split()
+		query = re.sub('[^A-Za-z0-9\n ]+', '', query.lower()).split()
 		query = [x for x in query if x not in self.stop_words]
 		return self.query_tf_idf(query)
 
 	# function to print results
 	def print_results(self, start, end, k, query, scores, method):
-		print("\nTop", k, "result(s) for the query '", query, "' using", method, "method are:\n\nRANK | DOC_ID | DOC_NAME      | SCORE")
+		print("\nTop", k, "result(s) for the query '", query, "' using", method,
+		      "method are:\n\nRANK | DOC_ID | DOC_NAME      | SCORE")
 		for i in range(k):
-			print('{num:02d}'.format(num=i+1), "  |", '{num:03d}'.format(num=scores[i][0]), "   |", self.doc_id[scores[i][0]], " |", scores[i][1])
+			print('{num:02d}'.format(num=i + 1), "  |", '{num:03d}'.format(num=scores[i][0] + 1), "   |",
+			      self.doc_id[scores[i][0]], " |", scores[i][1])
 		print("\nResults found in", '{:.20f}'.format(end - start), "seconds")
+
+	# function to initialize query vector
+	def init_query_vector(self, query):
+		query_init_dict = obj.clean_query(query)
+		query_vector = dict.fromkeys(obj.all_tokens_set, 0)
+		for k, v in query_init_dict.items():
+			for i, v2 in enumerate(v):
+				if i > 0:
+					query_vector[k] = v2[1]
+		return query_vector
+
+	# function to run pseudo-relevance
+	def run_pseudo_relevance(self, query, k_docs):
+		res = obj.query(query, k_docs)
+		query_vector = obj.init_query_vector(query)
+		for i in range(1, 6):
+			print("\n=== Rocchio Algorithm ===\n\nIteration:", i)
+			print("\nAssuming top 3 documents are relevant...")
+			pos_feedback = str(res[0][0] + 1) + " " + str(res[1][0] + 1) + " " + str(res[2][0] + 1)
+			query_vector = obj.rocchio(query_vector, pos_feedback, "", 1, 0.75, 0.15)
+
+			query = ""
+			for term, weight in query_vector.items():
+				if weight > 0:
+					query += term + " "
+			res = obj.query(query, k_docs)
+
+	def run_rocchio(self, query, k_docs):
+		again = "y"
+		iteration = 0
+		obj.query(query, k_docs)
+		query_vector = self.init_query_vector(query)
+		while again == "y":
+			iteration += 1
+			print("\n=== Rocchio Algorithm ===\n\n", "Iteration:", iteration)
+			rel_docs = input("Enter relevant document ids separated by space: ")
+			non_rel_docs = input("Enter non-relevant document ids separated by space: ")
+
+			query_vector = obj.rocchio(query_vector, rel_docs, non_rel_docs, 1.0, 0.75, 0.15)
+
+			query = ""
+			for term, weight in query_vector.items():
+				if weight > 0:
+					query += term + " "
+
+			obj.query(query, k_docs)
+			again = input("\nContinue with new query (y/n): ")
 
 
 obj = Index("./time/TIME.ALL", "./time/TIME.STP")
 print('\n>>> Build Index')
 obj.build_index()
 
-#query = input("Query to search: ")
+# query = input("Query to search: ")
 # k_docs = int(input("Number of (top) results: "))
-alpha = 1.0
-beta = 0.75
-gamma = 0.15
 
 # todo: remove after debug
 query = "BACKGROUND OF THE NEW CHANCELLOR OF WEST GERMANY, LUDWIG ERHARD ."
 k_docs = 10
-obj.query(query, k_docs)
 
-iteration = -1
-while 1:
-	if iteration == -1:
-		query_vector = obj.clean_query(query)
-
-	iteration += 1
-	print("\n=== Rocchio Algorithm ===\n")
-	print("Iteration:", iteration)
-	rel_docs = input("Enter relevant document ids separated by space: ")
-	none_rel_docs = input("Enter non-relevant document ids separated by space: ")
-	query_vector = obj.rocchio(query_vector, rel_docs, none_rel_docs, alpha, beta, gamma)
-
-	again = input("\nContinue with new query (y/n): ")
-	if again == "n":
-		break
-
-# todo: print query
+obj.run_pseudo_relevance(query, k_docs)
