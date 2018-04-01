@@ -7,26 +7,49 @@ import math
 
 
 class Index:
-	def __init__(self, doc_path, stop_list_path):
+	def __init__(self, doc_path, stop_list_path, query_path, relevance_path):
 		self.doc_path = doc_path
 		self.stop_list_path = stop_list_path
+		self.query_path = query_path
+		self.relevance_path = relevance_path
 
 		self.stop_words = {}
 		self.all_tokens_set = {}
+		self.queries = {}
+		self.relevant_docs = {}
 
 		self.doc_id = {}
 		self.documents = {}
+
+		self.old_maps = []
+		self.new_maps = []
 
 		self.collection = collections.defaultdict(list)
 
 		self.document_magnitudes = {}
 		self.document_vectors = {}
 
-	# function to read documents from collection, tokenize and build the index with tokens
-	# implement additional functionality to support relevance feedback
-	# use unique document integer IDs
-	def build_index(self):
-		start = time.time()
+		# read queries list
+		query_id = -1
+		for line in open(self.query_path):
+			if line[:5] == '*FIND':
+				query_id += 1
+				self.queries[query_id] = ""
+			elif line[:5] == "*STOP":
+				continue
+			else:
+				self.queries[query_id] += line.replace("\n", "") + " "
+
+		# read relevance list
+		query_id = -1
+		lines = filter(lambda x: not re.match(r'^\s*$', x), open(self.relevance_path))
+		for line in lines:
+			query_id += 1
+			line = list(map(int, line.split()))
+			docs = []
+			for doc in line[1:len(line)]:
+				docs.append(doc)
+			self.relevant_docs[query_id] = docs
 
 		# read stop list
 		stop_list = ""
@@ -45,6 +68,12 @@ class Index:
 			else:
 				words = [x for x in re.sub('[^A-Za-z0-9\n ]+', '', line.lower()).split() if x not in self.stop_words]
 				self.documents[doc_id].extend(words)
+
+	# function to read documents from collection, tokenize and build the index with tokens
+	# implement additional functionality to support relevance feedback
+	# use unique document integer IDs
+	def build_index(self):
+		start = time.time()
 
 		# insert into init dictionary
 		init_dict = collections.defaultdict(dict)
@@ -192,14 +221,6 @@ class Index:
 	helper functions
 	'''
 
-	# function to print the terms and posting list in the index
-	def print_dict(self):
-		pass
-
-	# function to print the document ids
-	def print_doc_list(self):
-		pass
-
 	# function to clean a query
 	def clean_query(self, query):
 		query = re.sub('[^A-Za-z0-9\n ]+', '', query.lower()).split()
@@ -226,20 +247,28 @@ class Index:
 		return query_vector
 
 	# function to run pseudo-relevance
-	def run_pseudo_relevance(self, query, k_docs):
+	def run_pseudo_relevance(self, query_id, k_docs):
+
+		query = self.queries[query_id]
 		res = obj.query(query, k_docs)
-		query_vector = obj.init_query_vector(query)
-		for i in range(1, 6):
+
+		self.find_metrics(query_id, res, k_docs)
+		self.old_maps.append(self.find_map(query_id, res, k_docs))
+
+		org_query_vector = obj.init_query_vector(query)
+
+		for i in range(1, 4):
 			print("\n=== Rocchio Algorithm ===\n\nIteration:", i)
 			print("\nAssuming top 3 documents are relevant...")
 			pos_feedback = str(res[0][0] + 1) + " " + str(res[1][0] + 1) + " " + str(res[2][0] + 1)
-			query_vector = obj.rocchio(query_vector, pos_feedback, "", 1, 0.75, 0.15)
+			query_vector = obj.rocchio(org_query_vector, pos_feedback, "", 1, 0.75, 0.15)
 
 			query = ""
 			for term, weight in query_vector.items():
 				if weight > 0:
 					query += term + " "
 			res = obj.query(query, k_docs)
+			self.new_maps.append(self.find_map(query_id, res, k_docs))
 
 	def run_rocchio(self, query, k_docs):
 		again = "y"
@@ -262,16 +291,54 @@ class Index:
 			obj.query(query, k_docs)
 			again = input("\nContinue with new query (y/n): ")
 
+	def find_metrics(self, query_id, results, k_docs):
+		count = 0
+		for i in range(0, k_docs):
+			if (results[i][0] + 1) in self.relevant_docs[query_id]:
+				count += 1
+		print("PRECISION: ", count / k_docs)
+		print("RECALL:    ", count / len(self.relevant_docs[query_id]))
 
-obj = Index("./time/TIME.ALL", "./time/TIME.STP")
+	def find_map(self, query_id, results, k_docs):
+		count = 0
+		recalls = []
+		for i in range(0, len(self.relevant_docs[query_id]) + 1):
+			if (results[i][0] + 1) in self.relevant_docs[query_id]:
+				count += 1
+				recalls.append(count / (i + 1))
+		return recalls
+
+
+obj = Index("./time/TIME.ALL", "./time/TIME.STP", "./time/TIME.QUE", "./time/TIME.REL")
 print('\n>>> Build Index')
 obj.build_index()
+query = input("Query to search: ")
+k_docs = int(input("Number of (top) results: "))
+obj.run_rocchio(query, k_docs)
 
-# query = input("Query to search: ")
-# k_docs = int(input("Number of (top) results: "))
-
-# todo: remove after debug
-query = "BACKGROUND OF THE NEW CHANCELLOR OF WEST GERMANY, LUDWIG ERHARD ."
-k_docs = 10
-
-obj.run_pseudo_relevance(query, k_docs)
+# query_ids = [5, 38, 39, 57, 79]
+# for query_id in query_ids:
+# 	obj.run_pseudo_relevance(query_id, 10)
+#
+# old_map = 0
+# for map in obj.old_maps:
+# 	add = 0
+# 	for item in map:
+# 		add += item
+# 	add /= len(map)
+# 	old_map += add
+# old_map /= len(obj.old_maps)
+#
+# print("\nWithout Rocchio MAP:", old_map)
+#
+# new_map = 0
+# for i in range(0, 3):
+# 	new_map = 0
+# 	for j in range(0, 5):
+# 		add = 0
+# 		for map in obj.new_maps[j * 3 + i]:
+# 			add += map
+# 		add /= len(obj.new_maps[j * 3 + i])
+# 		new_map += add
+# 	new_map /= len(query_ids)
+# 	print("With Rocchio MAP,", (i+1), "iteration(s):", new_map)
