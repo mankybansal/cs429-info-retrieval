@@ -73,6 +73,8 @@ class Index:
 	# implement additional functionality to support relevance feedback
 	# use unique document integer IDs
 	def build_index(self):
+		print('\n>>> Build Index')
+
 		start = time.time()
 
 		# insert into init dictionary
@@ -248,28 +250,29 @@ class Index:
 
 	# function to run pseudo-relevance
 	def run_pseudo_relevance(self, query_id, k_docs):
-
 		query = self.queries[query_id]
-		res = obj.query(query, k_docs)
+		results = obj.query(query, k_docs)
 
-		self.find_metrics(query_id, res, k_docs)
-		self.old_maps.append(self.find_map(query_id, res, k_docs))
+		self.find_metrics(query_id, results, k_docs)
+		self.old_maps.append(self.find_map(query_id, results))
 
 		org_query_vector = obj.init_query_vector(query)
 
 		for i in range(1, 4):
 			print("\n=== Rocchio Algorithm ===\n\nIteration:", i)
 			print("\nAssuming top 3 documents are relevant...")
-			pos_feedback = str(res[0][0] + 1) + " " + str(res[1][0] + 1) + " " + str(res[2][0] + 1)
+			pos_feedback = str(results[0][0] + 1) + " " + str(results[1][0] + 1) + " " + str(results[2][0] + 1)
 			query_vector = obj.rocchio(org_query_vector, pos_feedback, "", 1, 0.75, 0.15)
 
 			query = ""
 			for term, weight in query_vector.items():
 				if weight > 0:
 					query += term + " "
-			res = obj.query(query, k_docs)
-			self.new_maps.append(self.find_map(query_id, res, k_docs))
+			results = obj.query(query, k_docs)
+			self.find_metrics(query_id, results, k_docs)
+			self.new_maps.append(self.find_map(query_id, results))
 
+	# function to run rocchio program
 	def run_rocchio(self, query, k_docs):
 		again = "y"
 		iteration = 0
@@ -299,7 +302,7 @@ class Index:
 		print("PRECISION: ", count / k_docs)
 		print("RECALL:    ", count / len(self.relevant_docs[query_id]))
 
-	def find_map(self, query_id, results, k_docs):
+	def find_map(self, query_id, results):
 		count = 0
 		recalls = []
 		for i in range(0, len(self.relevant_docs[query_id]) + 1):
@@ -310,13 +313,21 @@ class Index:
 
 
 obj = Index("./time/TIME.ALL", "./time/TIME.STP", "./time/TIME.QUE", "./time/TIME.REL")
-print('\n>>> Build Index')
 obj.build_index()
+
 query = input("Query to search: ")
 k_docs = int(input("Number of (top) results: "))
+
 obj.run_rocchio(query, k_docs)
 
+#########################################
+#                                       #
+#  Uncomment this for Pseudo Relevance  #
+#                                       #
+#########################################
+
 # query_ids = [5, 38, 39, 57, 79]
+# query_ids = [46, 54, 27]
 # for query_id in query_ids:
 # 	obj.run_pseudo_relevance(query_id, 10)
 #
@@ -334,7 +345,7 @@ obj.run_rocchio(query, k_docs)
 # new_map = 0
 # for i in range(0, 3):
 # 	new_map = 0
-# 	for j in range(0, 5):
+# 	for j in range(0, len(query_ids)):
 # 		add = 0
 # 		for map in obj.new_maps[j * 3 + i]:
 # 			add += map
