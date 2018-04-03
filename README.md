@@ -11,3 +11,4 @@ A20392482
 * Assignment 1 - Boolean Retrieval  (02/05/2018)
 * Assignment 2 - Ranked Retrieval   (02/20/2018)
 * Assignment 3 - Relevance Feedback (03/31/2018)
+* Assignment 4 - Page Rank          (04/14/2018)
