@@ -96,3 +96,4 @@ class PageRank:
 i = PageRank()
 i.page_rank("test1.txt")
 i.page_rank("test2.txt")
+i.page_rank("test3.txt")
