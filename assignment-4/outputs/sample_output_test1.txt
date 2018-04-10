@@ -1,0 +1,11 @@
+Output for file  test1.txt
+Using initial vector with value of 1/5 for each element
+Doc	 Page Rank Score
+============================
+4 	 0.120301462216
+1 	 0.132382460492
+3 	 0.176459741205
+2 	 0.251641713768
+0 	 0.31921462232
+============================
+
