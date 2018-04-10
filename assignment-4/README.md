@@ -6,7 +6,7 @@ mbansal5@hawk.iit.edu
 ## Executing
 Run
 ```
-python3 pagerank.py > output.txt
+python3 pagerank.py > outputs/output.txt
 ```
 
 Uncomment out the testcase you want to run.
@@ -18,19 +18,15 @@ Uncomment out the testcase you want to run.
 ```test4.txt``` is a random testcase
 
 ### Saving to File
-Redirecting using,
-
+Redirecting using the following will save the output to output.txt,
 ```
 python3 pagerank.py > outputs/output.txt
 ```
 
 For the random testing,
-
 ```
 python3 pagerank.py > outputs/output_random.txt
 ```
-
-will save the output to output.txt
 
 ## Random Testing
 To run random tests, uncomment the following piece of code
