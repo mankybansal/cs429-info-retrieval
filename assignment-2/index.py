@@ -79,7 +79,6 @@ class Index:
 				for i, v2 in enumerate(v):
 					if i > 0 & doc == v2[0]:
 						document_vector[k] = v2[1]
-			print(d)
 			self.document_vectors[doc] = document_vector
 		# print(document_vector)
 		end = time.time()
