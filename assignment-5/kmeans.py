@@ -3,6 +3,7 @@ import re
 import math
 import collections
 import time
+import random
 
 
 # import other modules as needed
@@ -21,6 +22,7 @@ class Index:
 
 		self.document_magnitudes = {}
 		self.document_vectors = {}
+		self.avg_rss = []
 
 		# read stop list
 		stop_list = ""
@@ -69,11 +71,11 @@ class Index:
 			self.document_magnitudes[doc] = 0
 
 		# insert in vectors & calculate magnitude
-		for k, v in self.collection.items():
-			for i, v2 in enumerate(v):
-				if i > 0:
-					self.document_vectors[v2[0]][k] = v2[1]
-					self.document_magnitudes[v2[0]] += v2[1] ** 2
+		for token in self.all_tokens_set:
+			for i, v in enumerate(self.collection[token]):
+				if i != 0:
+					self.document_vectors[v[0]][token] = v[1]
+					self.document_magnitudes[v[0]] += v[1] ** 2
 
 		# recalculate magnitude
 		for doc, mag in self.document_magnitudes.items():
@@ -81,15 +83,107 @@ class Index:
 		end = time.time()
 		print("TF-IDF Index built in", '{:.20f}'.format(end - start), "seconds")
 
+	def cosine_similarity_docs(self, doc_1, doc_2):
+		scores = 0
+
+		doc_v1 = self.document_vectors[doc_1]
+		doc_v2 = self.document_vectors[doc_2]
+
+		for k, v in doc_v1.items():
+			if k in doc_v2.keys():
+				scores += v * doc_v2[k]
+
+		length = self.document_magnitudes[doc_1] * self.document_magnitudes[doc_2]
+		if length > 0:
+			cosine_score = scores / length
+		else:
+			cosine_score = 0
+
+		return cosine_score
+
 	# function to implement k means clustering algorithm
 	# Print out:
 	#   For each cluster, its RSS values and the document ID of the document closest to its centroid.
 	#   Average RSS value
 	#   Time taken for computation.
+
+	def cosine_scores(self, centroids, k_value):
+		cosine_scores = []
+		for i in range(0, k_value):
+			cosine_scores.append([-1] * len(self.doc_id))
+
+		for i in range(0, k_value):
+			for j in range(0, len(self.doc_id)):
+				if centroids[i] == j:
+					cosine_scores[i][j] = 1
+					continue
+				if cosine_scores[i][j] < 0:
+					cosine_scores[i][j] = self.cosine_similarity_docs(centroids[i], j)
+		return cosine_scores
+
+	def assign_cluster(self, cosine_scores):
+
+		clusters = collections.defaultdict(list)
+
+		for i in self.doc_id:
+			values = [column[i] for column in cosine_scores]
+			clusters[values.index(max(values))].append(i)
+		return clusters
+
+	def new_centroids(self, clusters, cosine_scores):
+
+		centroids = []
+		avg_rss = 0
+		for k, v in clusters.items():
+			avg = 0
+			for v2 in v:
+				avg += cosine_scores[k][v2]
+			avg /= len(clusters[k])
+
+			rss = 0
+			min = 1
+			min_index = 0
+			for k2, v2 in enumerate(clusters[k]):
+				rss += (cosine_scores[k][v2] - avg) ** 2
+				diff = cosine_scores[k][v2] - avg
+				if diff < min:
+					min = diff
+					min_index = k2
+			avg_rss += rss
+			centroids.append(min_index)
+		self.avg_rss.append(avg_rss / len(clusters.keys()))
+		return centroids
+
 	def clustering(self, k_value):
-		pass
+		self.avg_rss = []
+
+		centroids = []
+		while k_value > 0:
+			centroid_id = random.randint(0, len(self.doc_id) - 1)
+			if centroid_id not in centroids:
+				centroids.append(centroid_id)
+				k_value -= 1
+		# print("Init Centroids:", centroids)
+
+		k_value = len(centroids)
+
+		for times in range(0, 3):
+			cosine_scores = self.cosine_scores(centroids, k_value)
+			clusters = self.assign_cluster(cosine_scores)
+			# for i in range(0, len(clusters.keys())):
+			# 	print("   Cluster", i + 1, " (count):", len(clusters[i]))
+			centroids = self.new_centroids(clusters, cosine_scores)
+			# print("\nNew Centroids:", centroids)
 
 
 i = Index("time/TIME.ALL", "time/TIME.STP")
 
 i.build_index()
+
+
+for k in range(2,30):
+	start = time.time()
+	i.clustering(k)
+	end = time.time()
+
+	print("Avg RSS ( k =", k, "):", sum(i.avg_rss)/len(i.avg_rss), "\ttime:", '{:.20f}'.format(end - start), "seconds")
