@@ -171,7 +171,7 @@ class Index:
 
 		k_value = len(centroids)
 
-		for times in range(0, 3):
+		for times in range(0, 5):
 			cosine_scores = self.cosine_score(centroids, k_value)
 			clusters = self.assign_cluster(centroids, cosine_scores, k_value)
 			centroids = self.new_centroids(clusters, cosine_scores)
