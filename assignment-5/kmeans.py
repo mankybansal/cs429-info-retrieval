@@ -191,8 +191,10 @@ i = Index("time/TIME.ALL", "time/TIME.STP")
 
 i.build_index()
 
+x = int(input("Data Start: "))
+y = int(input("Data Stop: "))
 
-for k in range(2, 30):
+for k in range(x, y):
 	start = time.time()
 	i.clustering(k)
 	end = time.time()
