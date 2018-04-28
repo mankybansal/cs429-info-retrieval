@@ -5,7 +5,6 @@ import collections
 import time
 import random
 
-
 # import other modules as needed
 # implement other functions as needed
 class Index:
@@ -117,7 +116,7 @@ class Index:
 			for j in range(0, len(self.doc_id)):
 				cosine_scores[centroid][j] = self.cosine_similarity_docs(centroid, j)
 
-		print(cosine_scores)
+		#print(cosine_scores)
 		return cosine_scores
 
 	def assign_cluster(self, centroids, cosine_scores, k_value):
@@ -126,7 +125,7 @@ class Index:
 		for centroid in centroids:
 			clusters[centroid] = []
 
-		print(clusters)
+		#print(clusters)
 
 		for i in self.doc_id:
 			values = []
@@ -134,16 +133,16 @@ class Index:
 				values.append(cosine_scores[centroid][i])
 			# print("assign_cluster, values size:", len(values), "values:", values)
 			clusters[centroids[values.index(max(values))]].append(i)
-		print("assign_cluster, clusters:", clusters.keys())
-		print("assign_cluster, clusters size:", len(clusters))
-		print(clusters)
+		#print("assign_cluster, clusters:", clusters.keys())
+		#print("assign_cluster, clusters size:", len(clusters))
+		#print(clusters)
 		return clusters
 
 	def new_centroids(self, clusters, cosine_scores, k_value):
 
 		centroids = []
 		avg_rss = 0
-		print("new_centroids, cluster size:", len(clusters.keys()))
+		#print("new_centroids, cluster size:", len(clusters.keys()))
 		for k, v in clusters.items():
 			avg = 0
 			for v2 in v:
@@ -162,7 +161,7 @@ class Index:
 			avg_rss += rss
 			centroids.append(min_index)
 		self.avg_rss.append(avg_rss / len(clusters.keys()))
-		print("new_centroids, centroid size:", len(centroids))
+		#print("new_centroids, centroid size:", len(centroids))
 		return centroids
 
 	def clustering(self, k_value):
@@ -174,7 +173,7 @@ class Index:
 			if centroid_id not in centroids:
 				centroids.append(centroid_id)
 				k_value -= 1
-		print("Init Centroids:", centroids)
+		#print("Init Centroids:", centroids)
 
 		k_value = len(centroids)
 
@@ -185,16 +184,16 @@ class Index:
 			# 	print("   Cluster", i + 1, " (count):", len(clusters[i]))
 			centroids = self.new_centroids(clusters, cosine_scores, k_value)
 
-			print("\nNew Centroids:", centroids)
+			#print("\nNew Centroids:", centroids)
 
 
 i = Index("time/TIME.ALL", "time/TIME.STP")
 
 i.build_index()
 
-for k in range(12, 30):
+
+for k in range(2, 30):
 	start = time.time()
 	i.clustering(k)
 	end = time.time()
-	print("Avg RSS ( k =", k, "):", sum(i.avg_rss) / len(i.avg_rss), "\ttime:", '{:.20f}'.format(end - start),
-	      "seconds")
+	print("Avg RSS ( k =", k, "):", sum(i.avg_rss) / len(i.avg_rss), "\ttime:", '{:.20f}'.format(end - start), "seconds")
